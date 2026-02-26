@@ -1,0 +1,52 @@
+[meta]
+title = "Bun Text-to-Speech"
+description = "Get started using Deepgram's Text-to-Speech with this Bun demo app"
+author = "Deepgram DX Team <devrel@deepgram.com> (https://developers.deepgram.com)"
+repository = "https://github.com/deepgram-starters/bun-text-to-speech"
+useCase = "text-to-speech"
+language = "typescript"
+framework = "bun"
+sdk = "4.11.3"
+tags = ["text-to-speech", "tts", "audio-generation", "typescript", "bun"]
+
+[install.pre]
+command = "git submodule update --init --recursive"
+message = "Submodules initialized"
+
+[install]
+command = ["bun install", "cd frontend && corepack pnpm install"]
+message = "Dependencies installed"
+
+[install.config]
+sample = "sample.env"
+output = ".env"
+
+[check]
+command = ["command -v git", "command -v bun", "command -v pnpm"]
+message = "Prerequisites checked"
+
+[start.pre]
+command = ["test -f .env || echo 'Error: .env file not found'", "test -d frontend/.git || echo 'Error: Frontend submodule not initialized'"]
+message = "Pre-flight checks complete"
+
+[start]
+command = ["bun run server.ts", "cd frontend && corepack pnpm run dev -- --port 8080 --no-open"]
+parallel = true
+message = "Application running on http://localhost:8080"
+
+[update]
+command = "git submodule update --remote --merge"
+message = "Submodules updated"
+
+[clean]
+command = ["rm -rf node_modules", "rm -rf frontend/node_modules", "rm -rf frontend/dist"]
+message = "Build artifacts cleaned"
+
+[test]
+command = "bash contracts/tests/run-text-to-speech-app.sh"
+message = "Conformance tests passed"
+
+# Eject frontend and contracts submodules for standalone development
+[eject-frontend]
+command = "make eject-frontend"
+message = "Frontend ejected successfully"

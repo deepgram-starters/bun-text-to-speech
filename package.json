@@ -1,0 +1,37 @@
+{
+  "name": "@deepgram/bun-text-to-speech",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Text-to-speech conversion using Deepgram's TTS API with Bun",
+  "main": "server.ts",
+  "scripts": {
+    "start": "bun run server.ts",
+    "start-backend": "bun run --watch server.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepgram-starters/bun-text-to-speech.git"
+  },
+  "keywords": [
+    "text-to-speech",
+    "tts",
+    "deepgram",
+    "audio-generation",
+    "bun",
+    "typescript"
+  ],
+  "author": "Deepgram DX Team <devrel@deepgram.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deepgram-starters/bun-text-to-speech/issues"
+  },
+  "homepage": "https://github.com/deepgram-starters/bun-text-to-speech#readme",
+  "dependencies": {
+    "@deepgram/sdk": "4.11.3",
+    "@iarna/toml": "2.2.5",
+    "jsonwebtoken": "9.0.2"
+  },
+  "devDependencies": {
+    "@types/jsonwebtoken": "9.0.9"
+  }
+}
