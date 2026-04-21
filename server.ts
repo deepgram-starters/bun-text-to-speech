@@ -14,7 +14,7 @@
  * - Native TypeScript support via Bun runtime
  */
 
-import { createClient } from "@deepgram/sdk";
+import { DeepgramClient } from "@deepgram/sdk";
 import * as fs from "fs";
 import jwt from "jsonwebtoken";
 import * as path from "path";
@@ -108,7 +108,7 @@ const apiKey = loadApiKey();
 // SETUP - Initialize Deepgram client
 // ============================================================================
 
-const deepgram = createClient(apiKey);
+const deepgram = new DeepgramClient({ apiKey });
 
 // ============================================================================
 // CORS CONFIGURATION
@@ -188,23 +188,9 @@ async function streamToBuffer(stream: ReadableStream<Uint8Array>): Promise<Uint8
 async function generateAudio(
   text: string,
   model: string = DEFAULT_MODEL
-): Promise<Uint8Array> {
-  try {
-    const response = await deepgram.speak.request({ text }, { model });
-    const stream = await response.getStream();
-
-    if (!stream) {
-      throw new Error("No audio stream returned from Deepgram");
-    }
-
-    const buffer = await streamToBuffer(stream);
-    return buffer;
-  } catch (error) {
-    console.error("Error generating audio:", error);
-    throw new Error(
-      `Failed to generate audio: ${error instanceof Error ? error.message : String(error)}`
-    );
-  }
+): Promise<Buffer> {
+  const response = await deepgram.speak.v1.audio.generate({ text, model });
+  return Buffer.from(await response.arrayBuffer());
 }
 
 /**
