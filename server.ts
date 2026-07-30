@@ -14,7 +14,7 @@
  * - Native TypeScript support via Bun runtime
  */
 
-import { createClient } from "@deepgram/sdk";
+import { DeepgramClient } from "@deepgram/sdk";
 import * as fs from "fs";
 import jwt from "jsonwebtoken";
 import * as path from "path";
@@ -108,7 +108,26 @@ const apiKey = loadApiKey();
 // SETUP - Initialize Deepgram client
 // ============================================================================
 
-const deepgram = createClient(apiKey);
+// Support DEEPGRAM_BASE_URL (e.g. a staging host) via the SDK `environment`
+// option; falls back to the production endpoint when unset.
+const baseUrl = process.env.DEEPGRAM_BASE_URL;
+const deepgram = new DeepgramClient({
+  apiKey,
+  ...(baseUrl
+    ? {
+        environment: {
+          base: baseUrl
+            .replace(/^wss:\/\//, "https://")
+            .replace(/^ws:\/\//, "http://"),
+          production: baseUrl,
+          agent: baseUrl,
+          agentRest: baseUrl
+            .replace(/^wss:\/\//, "https://")
+            .replace(/^ws:\/\//, "http://"),
+        },
+      }
+    : {}),
+});
 
 // ============================================================================
 // CORS CONFIGURATION
@@ -190,8 +209,8 @@ async function generateAudio(
   model: string = DEFAULT_MODEL
 ): Promise<Uint8Array> {
   try {
-    const response = await deepgram.speak.request({ text }, { model });
-    const stream = await response.getStream();
+    const response = await deepgram.speak.v1.audio.generate({ text, model });
+    const stream = response.stream();
 
     if (!stream) {
       throw new Error("No audio stream returned from Deepgram");

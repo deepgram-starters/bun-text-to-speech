@@ -6,7 +6,7 @@ repository = "https://github.com/deepgram-starters/bun-text-to-speech"
 useCase = "text-to-speech"
 language = "typescript"
 framework = "bun"
-sdk = "4.11.3"
+sdk = "@deepgram/sdk"
 tags = ["text-to-speech", "tts", "audio-generation", "typescript", "bun"]
 
 [install.pre]
